@@ -1,4 +1,4 @@
-import 'package:ecommerce_major_project/widgets/textfield_widget.dart';
+import 'package:ecommerce_major_project/views/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -9,7 +9,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController emaiController = TextEditingController();
+  TextEditingController userController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController conformEmailController = TextEditingController();
   @override
@@ -21,7 +21,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.chevron_left,
               color: Colors.orange,
               size: 35,
@@ -56,7 +56,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 20,
                   ),
                   TextfieldWidget(
-                      controllerValue: emaiController, lblText: 'Email'),
+                      controllerValue: userController, lblText: 'Email'),
                   const SizedBox(
                     height: 10,
                   ),
