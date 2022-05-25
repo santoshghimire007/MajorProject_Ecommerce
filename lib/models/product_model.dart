@@ -6,7 +6,7 @@ class ProductModel {
     required this.description,
     required this.category,
     required this.image,
-    //this.rating,
+    this.rating,
   });
 
   int id;
@@ -15,7 +15,7 @@ class ProductModel {
   String description;
   String category;
   String image;
-  // Rating? rating;
+  Rating? rating;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
         id: json["id"],

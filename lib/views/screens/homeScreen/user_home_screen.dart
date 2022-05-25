@@ -83,7 +83,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       const BannerCarousel(),
                       // Image.network(
                       //     'https://static.vecteezy.com/system/resources/thumbnails/002/216/694/small/shopping-trendy-banner-vector.jpg'),
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 15),
+                      const Center(
+                        child: Text("Select Category",
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.deepOrangeAccent,
+                              fontSize: 15,
+                            )),
+                      ),
+                      const SizedBox(height: 10),
+
                       SizedBox(
                           height: 30,
                           child: ListView.builder(
@@ -92,8 +103,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               itemBuilder: (BuildContext context, int index) {
                                 return Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 5.0),
+                                        horizontal: 3.0),
                                     child: ActionChip(
+
+                                        // elevation: 0,
+                                        shadowColor: Colors.deepOrange,
+                                        backgroundColor: Colors.deepOrange,
                                         onPressed: () {
                                           String chipItem = _categories[index];
                                           Navigator.push(
@@ -104,23 +119,29 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                                         categoryItem: chipItem,
                                                       )));
                                         },
-                                        label: Text(_categories[index]),
+                                        label: Text(
+                                          _categories[index],
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
                                         padding: const EdgeInsets.all(8.0)));
                               })),
                       const SizedBox(height: 25),
-                      const Text("Hot Products",
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20)),
-                      const SizedBox(height: 25),
-                      HotProducts(allProducts: _hotProducts),
+
                       const SizedBox(height: 25),
                       const Text("Recently Viewed",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20)),
+
+                      RecentlyViewed(recentlyViewed: _recentlyViewed),
                       const SizedBox(height: 25),
-                      RecentlyViewed(recentlyViewed: _recentlyViewed)
+                      const Text("Hot Products",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20)),
+                      HotProducts(allProducts: _hotProducts),
+                      const SizedBox(height: 25),
                     ])));
   }
 }

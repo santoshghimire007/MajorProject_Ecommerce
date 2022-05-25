@@ -1,5 +1,7 @@
+import 'package:ecommerce_major_project/models/login_validation_model.dart';
 import 'package:ecommerce_major_project/models/product_model.dart';
 import 'package:ecommerce_major_project/services/apiServices/products_services.dart';
+import 'package:ecommerce_major_project/views/screens/homeScreen/user_home_screen.dart';
 import 'package:ecommerce_major_project/views/screens/signup_screen.dart';
 import 'package:ecommerce_major_project/views/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,26 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController userConroller = TextEditingController();
   TextEditingController passwordConroller = TextEditingController();
+
+  validateSignInDetails(BuildContext context) {
+    LoginValidationModel loginDetails = LoginValidationModel(
+      username: userConroller.text,
+      password: passwordConroller.text,
+    );
+    var validationResult = loginDetails.validateLoginDetails();
+    if (validationResult == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Logged in successfully')));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const UserHomeScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Username or password does not match')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +81,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(Colors.deepOrange)),
-                      onPressed: () {},
+                      onPressed: () {
+                        validateSignInDetails(context);
+                      },
                       child: const Text(
                         'Sign in',
                         style: TextStyle(fontSize: 16),

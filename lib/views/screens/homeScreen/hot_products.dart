@@ -1,6 +1,8 @@
 import 'package:ecommerce_major_project/models/product_model.dart';
 import 'package:flutter/material.dart';
 
+import '../product_details_page.dart';
+
 class HotProducts extends StatelessWidget {
   const HotProducts({
     Key? key,
@@ -65,22 +67,5 @@ class HotProducts extends StatelessWidget {
                     )),
               );
             }));
-  }
-}
-
-class ProductDetailPage extends StatelessWidget {
-  const ProductDetailPage({
-    Key? key,
-    required ProductModel hotProducts,
-  })  : _hotProducts = hotProducts,
-        super(key: key);
-
-  final ProductModel _hotProducts;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Hero(
-            tag: _hotProducts.id, child: Image.network(_hotProducts.image)));
   }
 }

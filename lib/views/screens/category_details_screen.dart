@@ -2,6 +2,8 @@ import 'package:ecommerce_major_project/models/product_model.dart';
 import 'package:ecommerce_major_project/services/apiServices/products_services.dart';
 import 'package:flutter/material.dart';
 
+import 'product_details_page.dart';
+
 class CategoryDetails extends StatefulWidget {
   const CategoryDetails({
     required this.categoryItem,
@@ -50,30 +52,48 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, childAspectRatio: 0.7),
                 itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                      color: Colors.grey.shade200,
-                      elevation: 2,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              height: 150,
-                              width: double.infinity,
-                              child: Image.network(_singleCat[index].image),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(_singleCat[index].title,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                )),
-                            const SizedBox(height: 10),
-                            Text('Price: ${_singleCat[index].price.toString()}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15))
-                          ]));
+                  return Hero(
+                    tag: _singleCat[index].id,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return ProductDetailPage(
+                                hotProducts: _singleCat[index]);
+                          }));
+                        },
+                        child: Card(
+                          color: Colors.grey.shade200,
+                          elevation: 2,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 150,
+                                  width: double.infinity,
+                                  child: Image.network(_singleCat[index].image),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(_singleCat[index].title,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    )),
+                                const SizedBox(height: 10),
+                                Text(
+                                    'Price: ${_singleCat[index].price.toString()}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15))
+                              ]),
+                        ),
+                      ),
+                    ),
+                  );
                 }));
   }
 }
