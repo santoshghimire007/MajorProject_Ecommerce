@@ -1,10 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecommerce_major_project/models/product_model.dart';
 import 'package:ecommerce_major_project/services/apiServices/products_services.dart';
+import 'package:ecommerce_major_project/views/screens/cart_screen.dart';
 import 'package:ecommerce_major_project/views/screens/category_details_screen.dart';
 import 'package:ecommerce_major_project/views/screens/homeScreen/hot_products.dart';
 import 'package:ecommerce_major_project/views/screens/homeScreen/recently_viewd.dart';
+import 'package:ecommerce_major_project/views/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -18,6 +21,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   List<ProductModel> _recentlyViewed = [];
   List<String> _categories = [];
   bool _loading = false;
+
+  late String? username;
+  late SharedPreferences loginData;
+
+  getAccount() async {
+    SharedPreferences loginData = await SharedPreferences.getInstance();
+    setState(() {
+      username = loginData.getString('Username');
+      // print(username);
+    });
+  }
 
   // _fetchAllProduct() async {
   //   List<ProductModel> data = await getProductsData();
@@ -41,6 +55,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   //   });
   // }
 
+  logout() async {
+    SharedPreferences logoutData = await SharedPreferences.getInstance();
+    logoutData.remove('Username');
+    // print(username);
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('Logged Out')));
+  }
+
   fetchAllData() async {
     setState(() {
       _loading = true;
@@ -62,6 +87,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   @override
   void initState() {
     fetchAllData();
+    getAccount();
     super.initState();
   }
 
@@ -69,13 +95,35 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CartScreen()));
+                },
+                icon: const Icon(Icons.shopping_cart),
+              ),
+              IconButton(
+                onPressed: () {
+                  logout();
+                },
+                icon: const Icon(Icons.logout),
+              )
+              // Text('Logout'),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: Icon(
+              //     Icons.logout,
+              //   ),
+              // ),
+            ],
             title: const Text('Home'),
             backgroundColor: Colors.deepOrange,
             automaticallyImplyLeading: false),
         body: _loading == true
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -83,7 +131,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       const BannerCarousel(),
                       // Image.network(
                       //     'https://static.vecteezy.com/system/resources/thumbnails/002/216/694/small/shopping-trendy-banner-vector.jpg'),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 0),
                       const Center(
                         child: Text("Select Category",
                             style: TextStyle(

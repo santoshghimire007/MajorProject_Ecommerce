@@ -1,3 +1,5 @@
+import 'package:ecommerce_major_project/views/screens/cart_screen.dart';
+import 'package:ecommerce_major_project/views/screens/provider.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/product_model.dart';
@@ -5,17 +7,20 @@ import '../../models/product_model.dart';
 class ProductDetailPage extends StatelessWidget {
   const ProductDetailPage({
     Key? key,
+    required this.heroId,
     required ProductModel hotProducts,
-  })  : _hotProducts = hotProducts,
+  })  : _details = hotProducts,
         super(key: key);
 
-  final ProductModel _hotProducts;
+  // final ProductModel _hotProducts;
+  final ProductModel _details;
+  final int heroId;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(_hotProducts.title),
+          title: Text(_details.title),
           backgroundColor: Colors.deepOrange,
         ),
         bottomNavigationBar: SizedBox(
@@ -26,7 +31,11 @@ class ProductDetailPage extends StatelessWidget {
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all(Colors.deepOrange)),
-                onPressed: () {},
+                onPressed: () {
+                  ProductCart.cartItems.add(_details);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CartScreen()));
+                },
                 child: const Text(
                   'Add to Card',
                   style: TextStyle(fontSize: 16),
@@ -38,19 +47,19 @@ class ProductDetailPage extends StatelessWidget {
             child: ListView(
               children: [
                 Hero(
-                    tag: _hotProducts.id,
+                    tag: _details.id,
                     child: Image.network(
-                      _hotProducts.image,
+                      _details.image,
                       height: 250,
                     )),
-                Text(_hotProducts.title,
+                Text(_details.title,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20)),
                 const SizedBox(height: 10),
-                Text(_hotProducts.description),
+                Text(_details.description),
                 const SizedBox(height: 10),
-                Text(_hotProducts.price.toString()),
+                Text('Price: ${_details.price.toString()}'),
               ],
             )));
   }

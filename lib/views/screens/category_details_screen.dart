@@ -61,11 +61,13 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                           Navigator.push(context, MaterialPageRoute(
                               builder: (BuildContext context) {
                             return ProductDetailPage(
-                                hotProducts: _singleCat[index]);
+                              hotProducts: _singleCat[index],
+                              heroId: _singleCat[index].id,
+                            );
                           }));
                         },
                         child: Card(
-                          color: Colors.grey.shade200,
+                          shadowColor: Colors.deepOrange,
                           elevation: 2,
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,19 +78,27 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                                   child: Image.network(_singleCat[index].image),
                                 ),
                                 const SizedBox(height: 10),
-                                Text(_singleCat[index].title,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                    )),
-                                const SizedBox(height: 10),
-                                Text(
-                                    'Price: ${_singleCat[index].price.toString()}',
-                                    style: const TextStyle(
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: Text(_singleCat[index].title,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 15))
+                                        fontSize: 15,
+                                      )),
+                                ),
+                                const SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: Text(
+                                      'Price: ${_singleCat[index].price.toString()}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15)),
+                                )
                               ]),
                         ),
                       ),

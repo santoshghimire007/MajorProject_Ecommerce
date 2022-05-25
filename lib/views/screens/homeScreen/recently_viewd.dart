@@ -29,16 +29,19 @@ class RecentlyViewed extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (BuildContext context) {
                       return ProductDetailPage(
-                          hotProducts: _recentlyViewed[index]);
+                        hotProducts: _recentlyViewed[index],
+                        heroId: _recentlyViewed[index].id,
+                      );
                     }));
                   },
                   child: Card(
                     elevation: 4,
+                    shadowColor: Colors.deepOrange,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0)),
                     margin: const EdgeInsets.symmetric(horizontal: 5.0),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

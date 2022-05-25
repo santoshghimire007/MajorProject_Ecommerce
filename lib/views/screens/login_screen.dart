@@ -5,6 +5,7 @@ import 'package:ecommerce_major_project/views/screens/homeScreen/user_home_scree
 import 'package:ecommerce_major_project/views/screens/signup_screen.dart';
 import 'package:ecommerce_major_project/views/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -17,6 +18,24 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController userConroller = TextEditingController();
   TextEditingController passwordConroller = TextEditingController();
 
+  late SharedPreferences loginCheck;
+  late bool newUser;
+
+  setAccount() async {
+    SharedPreferences loginData = await SharedPreferences.getInstance();
+    loginData.setString('Username', userConroller.text);
+    // loginData.setString('Password', passwordConroller.text);
+  }
+
+  alreadyLoginCheck() async {
+    loginCheck = await SharedPreferences.getInstance();
+    String? userdata = (loginCheck.getString('Username'));
+    if (userdata == 'admin') {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const UserHomeScreen()));
+    }
+  }
+
   validateSignInDetails(BuildContext context) {
     LoginValidationModel loginDetails = LoginValidationModel(
       username: userConroller.text,
@@ -26,15 +45,23 @@ class _LoginScreenState extends State<LoginScreen> {
     if (validationResult == true) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Logged in successfully')));
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const UserHomeScreen()),
-        (Route<dynamic> route) => false,
-      );
+      setAccount();
+      alreadyLoginCheck();
+      // Navigator.pushAndRemoveUntil(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => const UserHomeScreen()),
+      //   (Route<dynamic> route) => false,
+      // );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Username or password does not match')));
     }
+  }
+
+  @override
+  void initState() {
+    alreadyLoginCheck();
+    super.initState();
   }
 
   @override

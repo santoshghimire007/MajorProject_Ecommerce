@@ -29,10 +29,13 @@ class HotProducts extends StatelessWidget {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
                           return ProductDetailPage(
-                              hotProducts: _hotProducts[index]);
+                            hotProducts: _hotProducts[index],
+                            heroId: _hotProducts[index].id,
+                          );
                         }));
                       },
                       child: Card(
+                          shadowColor: Colors.deepOrange,
                           elevation: 4,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0)),
