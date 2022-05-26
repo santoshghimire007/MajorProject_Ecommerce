@@ -14,7 +14,7 @@ class ProductDetailPage extends StatelessWidget {
 
   // final ProductModel _hotProducts;
   final ProductModel _details;
-  final int heroId;
+  final dynamic heroId;
 
   @override
   Widget build(BuildContext context) {

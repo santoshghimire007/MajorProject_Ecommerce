@@ -53,7 +53,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                     crossAxisCount: 2, childAspectRatio: 0.7),
                 itemBuilder: (BuildContext context, int index) {
                   return Hero(
-                    tag: _singleCat[index].id,
+                    tag: _singleCat[index].id.toString() + 'cat',
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
@@ -62,7 +62,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
                               builder: (BuildContext context) {
                             return ProductDetailPage(
                               hotProducts: _singleCat[index],
-                              heroId: _singleCat[index].id,
+                              heroId: _singleCat[index].id.toString() + 'cat',
                             );
                           }));
                         },

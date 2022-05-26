@@ -21,7 +21,7 @@ class RecentlyViewed extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemBuilder: (BuildContext context, int index) {
             return Hero(
-              tag: _recentlyViewed[index].id,
+              tag: _recentlyViewed[index].id.toString() + 'recent',
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
@@ -30,7 +30,7 @@ class RecentlyViewed extends StatelessWidget {
                         MaterialPageRoute(builder: (BuildContext context) {
                       return ProductDetailPage(
                         hotProducts: _recentlyViewed[index],
-                        heroId: _recentlyViewed[index].id,
+                        heroId: _recentlyViewed[index].id.toString() + 'recent',
                       );
                     }));
                   },

@@ -21,7 +21,7 @@ class HotProducts extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
               return Hero(
-                tag: _hotProducts[index].id,
+                tag: _hotProducts[index].id.toString() + 'hot',
                 child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
@@ -30,7 +30,7 @@ class HotProducts extends StatelessWidget {
                             MaterialPageRoute(builder: (BuildContext context) {
                           return ProductDetailPage(
                             hotProducts: _hotProducts[index],
-                            heroId: _hotProducts[index].id,
+                            heroId: _hotProducts[index].id.toString() + 'hot',
                           );
                         }));
                       },
