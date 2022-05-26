@@ -101,8 +101,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             actions: [
               IconButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => CartScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CartScreen()));
                 },
                 icon: const Icon(Icons.shopping_cart),
               ),
@@ -169,32 +171,35 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               itemBuilder: (BuildContext context, int index) {
                                 return Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 3.0),
-                                    child: ActionChip(
-
-                                        // elevation: 0,
-                                        shadowColor: Colors.deepOrange,
-                                        backgroundColor: Colors.deepOrange,
-                                        onPressed: () {
-                                          String chipItem = _categories[index];
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CategoryDetails(
-                                                        categoryItem: chipItem,
-                                                      )));
-                                        },
-                                        label: Text(
-                                          _categories[index],
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                        padding: const EdgeInsets.all(8.0)));
+                                        horizontal: 5.0),
+                                    child: SizedBox(
+                                      height: 30,
+                                      child: ActionChip(
+                                          shadowColor: Colors.deepOrange,
+                                          backgroundColor: Colors.deepOrange,
+                                          onPressed: () {
+                                            String chipItem =
+                                                _categories[index];
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CategoryDetails(
+                                                          categoryItem:
+                                                              chipItem,
+                                                        )));
+                                          },
+                                          label: Text(
+                                            _categories[index],
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14),
+                                          ),
+                                          padding: const EdgeInsets.all(8.0)),
+                                    ));
                               })),
                       const SizedBox(height: 25),
 
-                      const SizedBox(height: 25),
                       const Text("Recently Viewed",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
