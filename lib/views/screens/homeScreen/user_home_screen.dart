@@ -144,7 +144,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         body: _loading == true
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -153,15 +153,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       // Image.network(
                       //     'https://static.vecteezy.com/system/resources/thumbnails/002/216/694/small/shopping-trendy-banner-vector.jpg'),
                       const SizedBox(height: 0),
-                      const Center(
-                        child: Text("Select Category",
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.deepOrangeAccent,
-                              fontSize: 15,
-                            )),
-                      ),
+                      const Text("Category",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            //color: Colors.deepOrangeAccent,
+                            fontSize: 20,
+                          )),
                       const SizedBox(height: 10),
 
                       SizedBox(
@@ -230,16 +227,16 @@ class BannerCarousel extends StatelessWidget {
             enlargeCenterPage: true,
             autoPlay: true),
         items: [
-          "https://static.vecteezy.com/system/resources/thumbnails/000/669/988/small/Shopping_online_Hand_Banner.jpg",
-          "https://static.vecteezy.com/system/resources/thumbnails/002/216/694/small/shopping-trendy-banner-vector.jpg",
-          "https://static.vecteezy.com/system/resources/thumbnails/003/240/364/small/shopping-online-on-phone-paper-art-modern-pink-background-gifts-box-free-vector.jpg",
+          'assets/images/banner1.png',
+          'assets/images/banner2.jpg',
+          'assets/images/banner3.jpg'
         ].map((i) {
           return Builder(builder: (BuildContext context) {
             return Container(
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(i), fit: BoxFit.contain)));
+                        image: AssetImage(i), fit: BoxFit.contain)));
           });
         }).toList());
   }
