@@ -38,6 +38,16 @@ class _AdminProductsScreenState extends State<AdminProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddProductsScreen()));
+              },
+              icon: const Icon(Icons.add))
+        ],
         title: const Text('All Products'),
       ),
       body: loader == true

@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:ecommerce_major_project/models/product_model.dart';
 import 'package:ecommerce_major_project/services/apiServices/products_services.dart';
+import 'package:ecommerce_major_project/views/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddProductsScreen extends StatefulWidget {
   const AddProductsScreen({Key? key}) : super(key: key);
@@ -10,28 +14,24 @@ class AddProductsScreen extends StatefulWidget {
 }
 
 class _AddProductsScreenState extends State<AddProductsScreen> {
-  List<ProductModel> allProducts = [];
+  File? _image;
 
-  bool loader = false;
-
-  fetchAllProducts() async {
-    setState(() {
-      loader = true;
-    });
-    List<ProductModel> data = await getProductsData();
-
-    setState(() {
-      allProducts = data;
-
-      loader = false;
-    });
+  final _picker = ImagePicker();
+  // Implementing the image picker
+  Future<void> _openImagePicker() async {
+    final XFile? pickedImage =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+    }
   }
 
-  @override
-  void initState() {
-    fetchAllProducts();
-    super.initState();
-  }
+  TextEditingController productsNameController = TextEditingController();
+  TextEditingController productsPriceController = TextEditingController();
+  TextEditingController productsDescriptionController = TextEditingController();
+  // TextEditingController productsCategoryController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +39,85 @@ class _AddProductsScreenState extends State<AddProductsScreen> {
       appBar: AppBar(
         title: const Text('Add Products'),
       ),
-      body: loader == true
-          ? const Center(
-              child: CircularProgressIndicator(),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          children: <Widget>[
+            _image == null
+                ? Container(
+                    height: 180,
+                    width: double.infinity,
+                    color: Colors.grey,
+                    child: Center(
+                      child: ElevatedButton(
+                          onPressed: () {
+                            _openImagePicker();
+                          },
+                          child: const Text('Add Image')),
+                    ),
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      _openImagePicker();
+                    },
+                    child: Container(
+                      height: 180,
+                      width: double.infinity,
+                      color: Colors.grey,
+                      child: Image.file(
+                        _image!,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextfieldWidget(
+                controllerValue: productsNameController,
+                lblText: 'Products Name'),
+            const SizedBox(
+              height: 10,
+            ),
+            TextfieldWidget(
+              controllerValue: productsPriceController,
+              lblText: 'Price',
+              kbType: TextInputType.number,
+            ),
+
+            const SizedBox(
+              height: 10,
+            ),
+            TextField(
+              controller: productsDescriptionController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                hintText: 'Enter description',
+                hintStyle: const TextStyle(fontWeight: FontWeight.bold),
+                labelText: 'Description',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {},
+                child: const Text('Add Products'),
+              ),
             )
-          : ListView.builder(
-              itemCount: allProducts.length,
-              itemBuilder: (BuildContext context, index) {
-                return ListTile(
-                  title: Text(allProducts[index].title),
-                );
-              }),
+
+            //  TextfieldWidget(
+            // controllerValue: productsCategoryController, lblText: 'Price'),
+          ],
+        ),
+      ),
     );
   }
 }
