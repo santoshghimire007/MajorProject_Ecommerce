@@ -62,29 +62,33 @@ class _CartScreenState extends State<CartScreen> {
                         context: context,
                         backgroundColor: Colors.transparent,
                         builder: (context) => Container(
-                              height: 450,
+                              height: 350,
                               decoration: const BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(50.0),
-                                      topRight: Radius.circular(50.0))),
+                                      topLeft: Radius.circular(30.0),
+                                      topRight: Radius.circular(30.0))),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   const SizedBox(
-                                    height: 40,
+                                    height: 20,
                                   ),
 
                                   const Text(
                                     'Do you want to checkout?',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 15),
+                                        fontSize: 18),
                                   ),
                                   Text(
                                     'Total Price: ${_cartAmount.toStringAsFixed(2)}',
                                     style: const TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
                                   ),
                                   // const Spacer(),
                                   Expanded(
