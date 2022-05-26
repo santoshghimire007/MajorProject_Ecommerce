@@ -59,8 +59,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     SharedPreferences logoutData = await SharedPreferences.getInstance();
     logoutData.remove('Username');
     // print(username);
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+      (Route<dynamic> route) => false,
+    );
 
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Logged Out')));
@@ -105,7 +108,25 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               ),
               IconButton(
                 onPressed: () {
-                  logout();
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            title:
+                                const Text('Are you sure you want to Logout?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('No'),
+                              ),
+                              TextButton(
+                                  onPressed: () {
+                                    logout();
+                                  },
+                                  child: const Text('Yes'))
+                            ],
+                          ));
                 },
                 icon: const Icon(Icons.logout),
               )

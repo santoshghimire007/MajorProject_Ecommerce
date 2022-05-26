@@ -32,9 +32,31 @@ class ProductDetailPage extends StatelessWidget {
                     backgroundColor:
                         MaterialStateProperty.all(Colors.deepOrange)),
                 onPressed: () {
-                  ProductCart.cartItems.add(_details);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => CartScreen()));
+                  if (ProductCart.cartItems.contains(_details)) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                        'Already added to cart!!',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.red,
+                      duration: Duration(seconds: 1),
+                    ));
+                  } else {
+                    ProductCart.cartItems.add(_details);
+
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                        'Added to cart !!',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 1),
+                    ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CartScreen()));
+                  }
                 },
                 child: const Text(
                   'Add to Card',
