@@ -194,7 +194,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               })),
                       const SizedBox(height: 25),
 
-                      const SizedBox(height: 25),
                       const Text("Recently Viewed",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(

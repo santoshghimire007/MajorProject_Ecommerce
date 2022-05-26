@@ -99,9 +99,7 @@ class _CartScreenState extends State<CartScreen> {
                                             child: ListTile(
                                               leading: CircleAvatar(
                                                   child: Text(
-                                                      _cartProducts[index]
-                                                          .id
-                                                          .toString())),
+                                                      (index + 1).toString())),
                                               title: Image.network(
                                                 _cartProducts[index].image,
                                                 height: 55,
