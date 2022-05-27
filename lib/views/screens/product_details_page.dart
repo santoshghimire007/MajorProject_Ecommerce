@@ -74,14 +74,26 @@ class ProductDetailPage extends StatelessWidget {
                       _details.image,
                       height: 250,
                     )),
+                const SizedBox(
+                  height: 5,
+                ),
                 Text(_details.title,
-                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.start,
+                    //overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20)),
                 const SizedBox(height: 10),
-                Text(_details.description),
+                Text(
+                  _details.description,
+                  textAlign: TextAlign.justify,
+                  style: const TextStyle(fontSize: 16),
+                ),
                 const SizedBox(height: 10),
-                Text('Price: ${_details.price.toString()}'),
+                Text(
+                  'Price: Rs ${_details.price.toString()}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
+                ),
               ],
             )));
   }
