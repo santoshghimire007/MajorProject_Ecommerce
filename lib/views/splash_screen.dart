@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:ecommerce_major_project/views/screens/adminScreens/admin_home_screen.dart';
+import 'package:ecommerce_major_project/views/screens/homeScreen/user_home_screen.dart';
+import 'package:ecommerce_major_project/views/screens/homeScreen/user_home_screen.dart';
 import 'package:ecommerce_major_project/views/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
@@ -16,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Timer(const Duration(seconds: 4), () {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const LoginScreen()));
+          MaterialPageRoute(builder: (_) => const UserHomeScreen()));
     });
     super.initState();
   }

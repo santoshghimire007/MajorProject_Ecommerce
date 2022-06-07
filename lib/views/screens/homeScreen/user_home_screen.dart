@@ -1,10 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ecommerce_major_project/models/product_model.dart';
-import 'package:ecommerce_major_project/services/apiServices/products_services.dart';
-import 'package:ecommerce_major_project/views/screens/cart_screen.dart';
-import 'package:ecommerce_major_project/views/screens/category_details_screen.dart';
-import 'package:ecommerce_major_project/views/screens/homeScreen/hot_products.dart';
-import 'package:ecommerce_major_project/views/screens/homeScreen/recently_viewd.dart';
+import 'package:ecommerce_major_project/views/screens/cart_screen_firebase.dart';
+import 'package:ecommerce_major_project/views/screens/firebase_category.dart';
+import 'package:ecommerce_major_project/views/screens/hot_products_firebase.dart';
 import 'package:ecommerce_major_project/views/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,9 +14,6 @@ class UserHomeScreen extends StatefulWidget {
 }
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
-  List<ProductModel> _hotProducts = [];
-  List<ProductModel> _recentlyViewed = [];
-  List<String> _categories = [];
   bool _loading = false;
 
   late String? username;
@@ -32,28 +26,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       // print(username);
     });
   }
-
-  // _fetchAllProduct() async {
-  //   List<ProductModel> data = await getProductsData();
-  //   setState(() {
-  //     data.shuffle();
-  //     _hotProducts = data;
-  //   });
-  // }
-
-  // _getRecentlyViewd() async {
-  //   List<ProductModel> data = await getRecentlyViewed();
-  //   setState(() {
-  //     _recentlyViewed = data;
-  //   });
-  // }
-
-  // _fetchCategories() async {
-  //   List<String> data = await getCategories();
-  //   setState(() {
-  //     _categories = data;
-  //   });
-  // }
 
   logout() async {
     SharedPreferences logoutData = await SharedPreferences.getInstance();
@@ -69,31 +41,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         .showSnackBar(const SnackBar(content: Text('Logged Out')));
   }
 
-  fetchAllData() async {
-    setState(() {
-      _loading = true;
-    });
-    List data = await Future.wait([
-      getCategories(),
-      getProductsData(),
-      getRecentlyViewed(),
-    ]);
-    setState(() {
-      _categories = data[0];
-      data[1].shuffle();
-      _hotProducts = data[1];
-      _recentlyViewed = data[2];
-      _loading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    fetchAllData();
-    getAccount();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +51,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CartScreen()));
+                          builder: (context) => CartScreenFirebase()));
                 },
                 icon: const Icon(Icons.shopping_cart),
               ),
@@ -150,69 +97,36 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const BannerCarousel(),
+                    children: const [
+                      BannerCarousel(),
                       // Image.network(
                       //     'https://static.vecteezy.com/system/resources/thumbnails/002/216/694/small/shopping-trendy-banner-vector.jpg'),
-                      const SizedBox(height: 0),
-                      const Text("Category",
+                      SizedBox(height: 0),
+                      Text("Category",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             //color: Colors.deepOrangeAccent,
                             fontSize: 20,
                           )),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
 
-                      SizedBox(
-                          height: 30,
-                          child: ListView.builder(
-                              itemCount: _categories.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5.0),
-                                    child: SizedBox(
-                                      height: 30,
-                                      child: ActionChip(
-                                          shadowColor: Colors.deepOrange,
-                                          backgroundColor: Colors.deepOrange,
-                                          onPressed: () {
-                                            String chipItem =
-                                                _categories[index];
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CategoryDetails(
-                                                          categoryItem:
-                                                              chipItem,
-                                                        )));
-                                          },
-                                          label: Text(
-                                            _categories[index],
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14),
-                                          ),
-                                          padding: const EdgeInsets.all(8.0)),
-                                    ));
-                              })),
-                      const SizedBox(height: 25),
+                      FirebaseCategory(),
 
-                      const Text("Recently Viewed",
+                      SizedBox(height: 25),
+
+                      Text("Recently Viewed",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20)),
 
-                      RecentlyViewed(recentlyViewed: _recentlyViewed),
-                      const SizedBox(height: 25),
-                      const Text("Hot Products",
+                      SizedBox(height: 25),
+                      Text("All Products",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20)),
-                      HotProducts(allProducts: _hotProducts),
-                      const SizedBox(height: 25),
+                      HotProductsFirebase(),
+                      // HotProducts(allProducts: _hotProducts),
+                      SizedBox(height: 25),
                     ])));
   }
 }
