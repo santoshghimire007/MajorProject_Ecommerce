@@ -1,13 +1,21 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ecommerce_major_project/models/user_model.dart';
+import 'package:ecommerce_major_project/services/sessionService/session_service.dart';
 import 'package:ecommerce_major_project/views/screens/cart_screen_firebase.dart';
 import 'package:ecommerce_major_project/views/screens/firebase_category.dart';
 import 'package:ecommerce_major_project/views/screens/hot_products_firebase.dart';
 import 'package:ecommerce_major_project/views/screens/login_screen.dart';
+import 'package:ecommerce_major_project/views/screens/recently_viewed_firebase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class UserHomeScreen extends StatefulWidget {
-  const UserHomeScreen({Key? key}) : super(key: key);
+  UserHomeScreen({Key? key, this.userData}) : super(key: key);
+
+  UserModel? userData;
 
   @override
   State<UserHomeScreen> createState() => _UserHomeScreenState();
@@ -19,18 +27,26 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   late String? username;
   late SharedPreferences loginData;
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _signOut() async {
+    await _auth.signOut();
+    await GoogleSignIn().signOut();
+  }
+
   getAccount() async {
     SharedPreferences loginData = await SharedPreferences.getInstance();
     setState(() {
-      username = loginData.getString('Username');
+      username = loginData.getString('uid');
       // print(username);
     });
   }
 
   logout() async {
     SharedPreferences logoutData = await SharedPreferences.getInstance();
-    logoutData.remove('Username');
-    // print(username);
+    logoutData.remove('uid');
+    _signOut();
+    SessionService.clearUserData();
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -71,6 +87,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               ),
                               TextButton(
                                   onPressed: () {
+                                    // logout();
                                     logout();
                                   },
                                   child: const Text('Yes'))
@@ -78,14 +95,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           ));
                 },
                 icon: const Icon(Icons.logout),
-              )
-              // Text('Logout'),
-              // IconButton(
-              //   onPressed: () {},
-              //   icon: Icon(
-              //     Icons.logout,
-              //   ),
-              // ),
+              ),
+              CircleAvatar(
+                  // backgroundColor: Colors.deepOrange,
+                  radius: 20,
+                  backgroundImage: NetworkImage(widget.userData!.profileImage)),
             ],
             title: const Text('Home'),
             backgroundColor: Colors.deepOrange,
@@ -118,6 +132,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20)),
+
+                      RecentlyViewedFirebase(),
 
                       SizedBox(height: 25),
                       Text("All Products",

@@ -89,7 +89,7 @@ class _AddProductsScreenState extends State<AddProductsScreen> {
     FirebaseFirestore.instance.collection("allProducts").add({
       "imageUrl": imageUrl,
       "name": productsNameController.text,
-      "price": productsPriceController.text,
+      "price": double.parse(productsPriceController.text),
       "description": productsDescriptionController.text,
       "stock": stock,
       "category": dropDownValue,
