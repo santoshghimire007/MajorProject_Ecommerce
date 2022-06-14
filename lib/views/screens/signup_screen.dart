@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_major_project/views/screens/homeScreen/user_home_screen.dart';
 import 'package:ecommerce_major_project/views/widgets/textfield_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -9,9 +14,12 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController userController = TextEditingController();
-  TextEditingController passController = TextEditingController();
-  TextEditingController conformEmailController = TextEditingController();
+  // TextEditingController userController = TextEditingController();
+  // TextEditingController passController = TextEditingController();
+  // TextEditingController conformEmailController = TextEditingController();
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,45 +53,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   const SizedBox(height: 30),
                   const Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.center,
                     child: Text(
                       'Create your Account',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                     ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  TextfieldWidget(
-                      controllerValue: userController, lblText: 'Email'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextfieldWidget(
-                      controllerValue: passController, lblText: 'Password'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextfieldWidget(
-                      controllerValue: conformEmailController,
-                      lblText: 'Confirm Password'),
+                  // TextfieldWidget(
+                  //     controllerValue: userController, lblText: 'Email'),
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
+                  // TextfieldWidget(
+                  //     controllerValue: passController, lblText: 'Password'),
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
+                  // TextfieldWidget(
+                  //     controllerValue: conformEmailController,
+                  //     lblText: 'Confirm Password'),
                   const SizedBox(
                     height: 15,
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.deepOrange)),
-                      onPressed: () {},
-                      child: const Text(
-                        'Sign up',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ),
+          
                   ),
                 ],
               ),

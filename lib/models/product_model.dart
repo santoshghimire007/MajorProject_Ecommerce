@@ -57,3 +57,40 @@ class Rating {
         "count": count,
       };
 }
+
+class ProductModelFirebase {
+  ProductModelFirebase({
+    required this.category,
+    required this.description,
+    this.price,
+    this.name,
+    this.stock,
+    this.imageUrl,
+  });
+
+  String category;
+  String description;
+  double? price;
+  String? name;
+  bool? stock;
+  String? imageUrl;
+
+  factory ProductModelFirebase.fromJson(Map<String, dynamic> json) =>
+      ProductModelFirebase(
+        category: json["category"],
+        description: json["description"],
+        price: double.parse(json["price"]),
+        name: json["name"],
+        stock: json["stock"],
+        imageUrl: json["imageUrl"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "category": category,
+        "description": description,
+        "price": price,
+        "name": name,
+        "stock": stock,
+        "imageUrl": imageUrl,
+      };
+}

@@ -170,7 +170,8 @@ class _AdminProductsScreenState extends State<AdminProductsScreen> {
                                                       .data!.docs[index].id);
                                                 },
                                                 icon: const Icon(
-                                                    Icons.delete_forever),
+                                                  Icons.delete_forever,
+                                                ),
                                                 iconSize: 35,
                                               ),
                                             ],

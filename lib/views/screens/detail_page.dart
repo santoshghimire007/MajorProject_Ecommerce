@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_major_project/models/user_model.dart';
+import 'package:ecommerce_major_project/services/sessionService/session_service.dart';
 import 'package:ecommerce_major_project/views/screens/cart_screen_firebase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({Key? key, required this.detailProduct}) : super(key: key);
@@ -13,12 +19,26 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   bool loader = false;
+  late Map<String, dynamic> userInfo;
+  getUserData() async {
+    SharedPreferences loginData = await SharedPreferences.getInstance();
+    var userInfoString = loginData.getString('uid');
+    userInfo = jsonDecode(userInfoString!);
+  }
+
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+  }
 
   void _saveCart() {
     FirebaseFirestore.instance.collection("cart").add({
+      "uid": userInfo['uid'],
+      "productId": widget.detailProduct.id,
       "imageUrl": widget.detailProduct['imageUrl'],
       "name": widget.detailProduct['name'],
-      "price": widget.detailProduct['price'],
+      "price": double.parse(widget.detailProduct['price'].toString()),
       "description": widget.detailProduct['description'],
       "stock": widget.detailProduct['stock'],
       "category": widget.detailProduct['category'],
@@ -46,6 +66,7 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    // print(widget.detailProduct['price']);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.detailProduct['name']),
@@ -73,10 +94,10 @@ class _DetailPageState extends State<DetailPage> {
             const SizedBox(
               height: 10,
             ),
-            Text(
-              'Rs: ' + widget.detailProduct['price'],
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
+            // Text(
+            //   'Rs: ${widget.detailProduct['price']} ',
+            //   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            // ),
             const SizedBox(
               height: 10,
             ),
@@ -106,7 +127,20 @@ class _DetailPageState extends State<DetailPage> {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () {
-                  _saveCart();
+                  FirebaseFirestore.instance
+                      .collection("cart")
+                      .where("productId", isEqualTo: widget.detailProduct.id)
+                      .where("uid", isEqualTo: SessionService.userData!.uid)
+                      .get()
+                      .then((value) {
+                    if (value.docs.isEmpty) {
+                      _saveCart();
+                    } else {
+                      // print('Product Already Exists');
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Product Already Exist')));
+                    }
+                  });
                 },
                 child: const Text('Add to cart'),
               ),
