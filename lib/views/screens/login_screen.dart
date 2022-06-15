@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_major_project/models/user_model.dart';
 import 'package:ecommerce_major_project/services/sessionService/session_service.dart';
@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -57,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     } catch (error) {
-      print(error);
+      log(error.toString());
     }
   }
 
@@ -92,79 +93,54 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Center(
-              child: Column(children: [
-            const SizedBox(height: 70),
-            GestureDetector(
+        body: Container(
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/login_bg.jpg'),
+              fit: BoxFit.cover)),
+      child: Container(
+        color: Colors.black87.withOpacity(0.6),
+        child: Column(children: [
+          const Spacer(),
+          const Align(
+              alignment: Alignment.center,
+              child: Text('Login to E-Cart',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 35,
+                      color: Colors.white))),
+          const SizedBox(height: 30),
+          GestureDetector(
               onLongPress: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const AdminLogin()));
               },
-              child: SizedBox(
-                height: 200,
-                width: 200,
-                child: Image.asset('assets/images/logoe.png'),
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            const Align(
-              alignment: Alignment.center,
-              child: Text(
-                'Login Here',
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            // TextfieldWidget(
-            //     controllerValue: userConroller, lblText: 'Username'),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-            // TextfieldWidget(
-            //     controllerValue: passwordConroller, lblText: 'Password'),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-            // SizedBox(
-            //     width: double.infinity,
-            //     child: ElevatedButton(
-            //         style: ButtonStyle(
-            //             backgroundColor:
-            //                 MaterialStateProperty.all(Colors.deepOrange)),
-            //         onPressed: () {
-            //           validateSignInDetails(context);
-            //         },
-            //         child: const Text(
-            //           'Sign in',
-            //           style: TextStyle(fontSize: 16),
-            //         ))),
-            // const SizedBox(height: 15),
-            // const Text("Don't have an Account?",
-            //     style: TextStyle(fontSize: 16)),
-            ElevatedButton.icon(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(Colors.deepOrange)),
-              onPressed: () {
-                googleLogin();
-              },
-              label: const Text('Sign in as..'),
-              icon: const FaIcon(
-                FontAwesomeIcons.google,
-              ),
-            )
-          ])),
-        ),
+              child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(70),
+                      bottomRight: Radius.circular(70)),
+                  child: Lottie.asset("assets/images/login1.json",
+                      height: 240.0, width: 450))),
+          const SizedBox(height: 30),
+          SizedBox(
+              width: 230,
+              height: 50,
+              child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)))),
+                  onPressed: () {
+                    googleLogin();
+                  },
+                  label: const Text('Continue with Google',
+                      style: TextStyle(color: Colors.deepOrange)),
+                  icon: const FaIcon(FontAwesomeIcons.google,
+                      color: Colors.deepOrange))),
+          const Spacer(),
+        ]),
       ),
     ));
   }
