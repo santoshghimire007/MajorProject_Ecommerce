@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:ecommerce_major_project/models/category_model.dart';
 import 'package:ecommerce_major_project/models/product_model.dart';
 import 'package:http/http.dart' as http;
 

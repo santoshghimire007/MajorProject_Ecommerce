@@ -18,15 +18,15 @@ class _PendingState extends State<Pending> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference booking =
       FirebaseFirestore.instance.collection('booking');
-  var docId;
+
   // ignore: prefer_typing_uninitialized_variables
   var documentSnapshot;
 
-  void _updateStatus({required int updateVale}) async {
+  void _updateStatus({required int updateVale, var documentId}) async {
     try {
       await firestore
           .collection('booking')
-          .doc(docId)
+          .doc(documentId)
           .update({'status': updateVale});
 
       // await firestore.collection('products').add({'name': 'Shoe', 'price': 99});   //For auto increment id use add
@@ -61,7 +61,7 @@ class _PendingState extends State<Pending> {
               return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (BuildContext context, index) {
-                    docId = snapshot.data!.docs[index].id;
+                    var docId = snapshot.data!.docs[index].id;
                     documentSnapshot = FirebaseFirestore.instance
                         .collection('booking')
                         .where(docId)
@@ -69,12 +69,9 @@ class _PendingState extends State<Pending> {
                     String jsonResponse =
                         jsonEncode(snapshot.data!.docs[index].data());
 
-
                     BookingDetailsModel bookingDetails =
                         BookingDetailsModel.fromJson(jsonDecode(jsonResponse));
 
-
-                        
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -110,14 +107,16 @@ class _PendingState extends State<Pending> {
                                         onPressed: () {
                                           _updateStatus(
                                               updateVale:
-                                                  BookingEnum.rejected.index);
+                                                  BookingEnum.rejected.index,
+                                              documentId: docId);
                                         },
                                         child: const Text('Reject')),
                                     TextButton(
                                         onPressed: () {
                                           _updateStatus(
                                               updateVale:
-                                                  BookingEnum.accepted.index);
+                                                  BookingEnum.accepted.index,
+                                              documentId: docId);
                                         },
                                         child: const Text('Confirm'))
                                   ]))),

@@ -19,6 +19,7 @@ class _CartScreenFirebaseState extends State<CartScreenFirebase> {
   double sum = 0;
   bool loader = false;
   var listForBooking = [];
+  bool isEmptyCart = true;
 
   Future getCartPriceTotal() async {
     setState(() {
@@ -43,6 +44,7 @@ class _CartScreenFirebaseState extends State<CartScreenFirebase> {
         "totalPrice": sum,
         "status": BookingEnum.pending.index
       }).whenComplete(() => loader = false);
+
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Checkout successfully'),
         duration: Duration(seconds: 1),
@@ -66,6 +68,9 @@ class _CartScreenFirebaseState extends State<CartScreenFirebase> {
     firestore.collection('cart').doc(id).delete().then((value) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Item Deleted !')));
+      setState(() {
+        listForBooking.remove(id);
+      });
     }, onError: (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
@@ -74,17 +79,17 @@ class _CartScreenFirebaseState extends State<CartScreenFirebase> {
 
   @override
   Widget build(BuildContext context) {
-    print(listForBooking.length);
     return Scaffold(
-        bottomNavigationBar:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('Total: $sum'),
-          TextButton(
-              onPressed: () {
-                bookingList();
-              },
-              child: const Text('Checkout'))
-        ]),
+        bottomNavigationBar: sum == 0.0 || sum == 0
+            ? null
+            : Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text('Total: $sum'),
+                TextButton(
+                    onPressed: () {
+                      bookingList();
+                    },
+                    child: const Text('Checkout'))
+              ]),
         appBar: AppBar(title: const Text('Your Cart')),
         body: StreamBuilder<QuerySnapshot>(
             stream: cart
@@ -121,11 +126,9 @@ class _CartScreenFirebaseState extends State<CartScreenFirebase> {
                                 radius: 30.5,
                                 backgroundImage: NetworkImage(
                                     snapshot.data!.docs[index]['imageUrl'])),
-                            title: Text(
-                              snapshot.data!.docs[index]['name'],
-                              style: const TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold),
-                            ),
+                            title: Text(snapshot.data!.docs[index]['name'],
+                                style: const TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.bold)),
                             subtitle: Text(
                                 "Rs: ${snapshot.data!.docs[index]['price']}"),
                             trailing: IconButton(
