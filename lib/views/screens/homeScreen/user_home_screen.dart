@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_major_project/models/user_model.dart';
 import 'package:ecommerce_major_project/services/sessionService/session_service.dart';
 import 'package:ecommerce_major_project/views/screens/cart_screen_firebase.dart';
@@ -11,10 +8,8 @@ import 'package:ecommerce_major_project/views/screens/hot_products_firebase.dart
 import 'package:ecommerce_major_project/views/screens/login_screen.dart';
 import 'package:ecommerce_major_project/views/screens/recently_viewed_firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -29,53 +24,6 @@ class UserHomeScreen extends StatefulWidget {
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
   bool _loading = false;
-
-  File? updateProfilePicture;
-
-  final pickerForUpdate = ImagePicker();
-  // Implementing the image picker
-  Future<void> updatePp() async {
-    final XFile? upImage =
-        await pickerForUpdate.pickImage(source: ImageSource.gallery);
-    if (upImage != null) {
-      setState(() {
-        updateProfilePicture = File(upImage.path);
-      });
-      uploadImage();
-    }
-  }
-
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-  void uploadImage() {
-    String imageFileName = DateTime.now().microsecondsSinceEpoch.toString();
-    final Reference storageReference =
-        FirebaseStorage.instance.ref().child("Images").child(imageFileName);
-    final UploadTask uploadTask =
-        storageReference.putFile(updateProfilePicture!);
-
-    uploadTask.then((TaskSnapshot taskSnapshot) {
-      taskSnapshot.ref.getDownloadURL().then((imageUrl) {
-        // _saveData(imageUrl);
-      }).catchError((error) {
-        setState(() {
-          // loader = false;
-        });
-      });
-    });
-  }
-
-  void _saveData(String imageUrl) {
-    try {
-      FirebaseFirestore.instance
-          .collection('Usuarios')
-          .doc(SessionService.userData!.uid)
-          .update({'profilePic': true});
-    } catch (e) {
-      print(e.toString());
-    }
-  }
 
   // updateProfilePicture({required String profileImage, required var docId}) async {
 
@@ -132,44 +80,38 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         appBar: AppBar(
             actions: [
               IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CartScreenFirebase()));
-                },
-                icon: const Icon(Icons.shopping_cart),
-              ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CartScreenFirebase()));
+                  },
+                  icon: const Icon(Icons.shopping_cart)),
               IconButton(
                 onPressed: () {
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                            title:
-                                const Text('Are you sure you want to Logout?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('No'),
-                              ),
-                              TextButton(
-                                  onPressed: () {
-                                    // logout();
-                                    logout();
-                                  },
-                                  child: const Text('Yes'))
-                            ],
-                          ));
+                              title: const Text(
+                                  'Are you sure you want to Logout?'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('No')),
+                                TextButton(
+                                    onPressed: () {
+                                      // logout();
+                                      logout();
+                                    },
+                                    child: const Text('Yes'))
+                              ]));
                 },
                 icon: const Icon(Icons.logout),
               ),
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    updateProfilePicture = null;
-                  });
                   showModalBottomSheet(
                       isScrollControlled: true,
                       shape: const RoundedRectangleBorder(
@@ -198,27 +140,16 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                   height: 400,
                                   child: Column(children: <Widget>[
                                     const SizedBox(height: 40),
-                                    GestureDetector(
-                                      onTap: () {
-                                        updatePp();
-                                      },
-                                      child: updateProfilePicture == null
-                                          ? CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage: NetworkImage(
-                                                  widget
-                                                      .userData!.profileImage),
-                                            )
-                                          : CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage: FileImage(
-                                                  updateProfilePicture!)),
+                                    CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: NetworkImage(
+                                          widget.userData!.profileImage),
                                     ),
                                     const SizedBox(
                                       height: 10,
                                     ),
                                     Text(
-                                      widget.userData!.displayName!,
+                                      SessionService.userData!.displayName!,
                                       style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
@@ -227,18 +158,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                       height: 30,
                                     ),
                                     SizedBox(
-                                      height: 70,
-                                      width: 200,
-                                      child: Text(
-                                        widget.userData!.email,
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 60,
-                                    ),
+                                        height: 70,
+                                        width: 200,
+                                        child: Text(
+                                            SessionService.userData!.email,
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold))),
+                                    const SizedBox(height: 60),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
@@ -247,11 +174,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                         children: [
                                           OutlinedButton(
                                               onPressed: () {
+                                                Navigator.pop(context);
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                        builder: (ctx) =>
-                                                            UserProfileUpdate()));
+                                                        builder: ((context) =>
+                                                            UserProfileUpdate())));
                                               },
                                               child:
                                                   const Text('Update Profile')),
